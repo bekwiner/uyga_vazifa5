@@ -1,15 +1,9 @@
-const bcrypt = require('bcryptjs');
+import { Schema, model } from 'mongoose';
 
-const hashPassword = async (plainPassword) => {
-  const salt = await bcrypt.genSalt(10);
-  return await bcrypt.hash(plainPassword, salt);
-};
+const AdminSchema = new Schema({
+  email:    { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  role:     { type: String, enum: ['superadmin','admin'], default: 'admin' }
+}, { timestamps: true });
 
-const comparePassword = async (plainPassword, hashedPassword) => {
-  return await bcrypt.compare(plainPassword, hashedPassword);
-};
-
-module.exports = {
-  hashPassword,
-  comparePassword,
-};
+export default model('Admin', AdminSchema);

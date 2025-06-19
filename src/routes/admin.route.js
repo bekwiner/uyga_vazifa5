@@ -1,17 +1,13 @@
-const express = require('express');
-const {
-    createAdmin,
-    getAdmins,
-    getAdminById,
-    updateAdmin,
-    deleteAdmin,
-} = require('../controller/admin.controller');
-const router = express.Router();
+import { Router } from "express";
+import { AdminController } from "../controllers/admin.controller.js";
 
-router.post('/', createAdmin);
-router.get('/', getAdmins);
-router.get('/:id', getAdminById);
-router.put('/:id', updateAdmin);
-router.delete('/:id', deleteAdmin);
+const r = Router();
 
-module.exports = router;
+r.post("/signup", AdminController.signup);
+r.post("/login", AdminController.login);
+r.get("/", AdminController.getAll);
+r.get("/:id", AdminController.getById);
+r.patch("/:id", AdminController.update);
+r.delete("/:id", AdminController.delete);
+
+export default r;

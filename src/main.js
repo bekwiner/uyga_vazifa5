@@ -1,19 +1,24 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const adminRoutes = require('./routes/admin.route');
-require('dotenv').config();
+import express from "express";
+import dotenv from "dotenv";
+import { connectDB } from "./db/index.js";
+import adminRouter from "./routes/admin.route.js";
+import customerRouter from "./routes/customer.route.js";
+import transportRouter from "./routes/transport.route.js";
+import ticketRouter from "./routes/ticket.route.js";
 
+dotenv.config();
 
 const app = express();
-app.use(express.json());
-app.use('/admins', adminRoutes);
+const PORT = process.env.PORT || 3000;
 
-mongoose.connect(process.env.DB_URL)
-  .then(() => {
-    app.listen(process.env.PORT, () => {
-      console.log(`Server running on port ${process.env.PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error('Database connection error:', err);
-  });
+app.use(express.json());
+await connectDB();
+
+app.use("/admin", adminRouter);
+app.use("/customer", customerRouter);
+app.use("/transport", transportRouter);
+app.use("/ticket", ticketRouter);
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
