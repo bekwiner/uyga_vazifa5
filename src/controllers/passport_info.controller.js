@@ -2,51 +2,48 @@ import PassportInfo from "../models/passport_info.model.js";
 import { handleError } from "../helpers/error-response.js";
 import { successRes } from "../helpers/success-response.js";
 
-export const createPassport = async (req, res) => {
+export const create = async (req, res) => {
   try {
     const passport = await PassportInfo.create(req.body);
-    successRes(res, "Passport info created", passport);
+    successRes(res, passport, "Passport yaratildi");
   } catch (err) {
     handleError(res, err);
   }
 };
 
-export const getAllPassports = async (req, res) => {
+export const getAll = async (req, res) => {
   try {
-    const data = await PassportInfo.find().populate("customer");
-    successRes(res, "All passport info", data);
+    const passports = await PassportInfo.find().populate("customer");
+    successRes(res, passports, "Barcha passportlar");
   } catch (err) {
     handleError(res, err);
   }
 };
 
-export const getPassportById = async (req, res) => {
+export const getById = async (req, res) => {
   try {
-    const data = await PassportInfo.findById(req.params.id).populate("customer");
-    if (!data) return res.status(404).json({ message: "Not found" });
-    successRes(res, "Passport info", data);
+    const passport = await PassportInfo.findById(req.params.id).populate("customer");
+    successRes(res, passport, "Passport topildi");
   } catch (err) {
     handleError(res, err);
   }
 };
 
-export const updatePassport = async (req, res) => {
+export const update = async (req, res) => {
   try {
-    const data = await PassportInfo.findByIdAndUpdate(req.params.id, req.body, {
-      new: true
+    const updated = await PassportInfo.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
     });
-    if (!data) return res.status(404).json({ message: "Not found" });
-    successRes(res, "Updated", data);
+    successRes(res, updated, "Passport yangilandi");
   } catch (err) {
     handleError(res, err);
   }
 };
 
-export const deletePassport = async (req, res) => {
+export const remove = async (req, res) => {
   try {
-    const data = await PassportInfo.findByIdAndDelete(req.params.id);
-    if (!data) return res.status(404).json({ message: "Not found" });
-    successRes(res, "Deleted", data);
+    await PassportInfo.findByIdAndDelete(req.params.id);
+    successRes(res, null, "Passport o‘chirildi");
   } catch (err) {
     handleError(res, err);
   }

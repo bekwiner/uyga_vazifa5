@@ -1,16 +1,16 @@
 import Joi from "joi";
-import mongoose from "mongoose";
 
-export const createPassportValidator = Joi.object({
-  customer: Joi.string().custom((value, helpers) => {
-    if (!mongoose.Types.ObjectId.isValid(value)) {
-      return helpers.error("any.invalid");
-    }
-    return value;
+export const passportInfoValidator = Joi.object({
+  passportNumber: Joi.string().required().messages({
+    "any.required": `"passportNumber" majburiy`,
   }),
-  series: Joi.string().required(),
-  number: Joi.string().required(),
-  issuedBy: Joi.string().optional(),
-  dateOfIssue: Joi.date().optional(),
-  dateOfExpiry: Joi.date().optional()
+  nationality: Joi.string().required().messages({
+    "any.required": `"nationality" majburiy`,
+  }),
+  dateOfBirth: Joi.date().required().messages({
+    "any.required": `"dateOfBirth" majburiy`,
+  }),
+  customer: Joi.string().required().messages({
+    "any.required": `"customer" (ID) majburiy`,
+  }),
 });

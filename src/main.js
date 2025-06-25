@@ -5,7 +5,7 @@ import adminRouter from "./routes/admin.route.js";
 import customerRouter from "./routes/customer.route.js";
 import transportRouter from "./routes/transport.route.js";
 import ticketRouter from "./routes/ticket.route.js";
-import passportRoutes from "./routes/passport_info.route.js";
+import passportRoutes from "./routes/passport_info.route.js"; 
 
 dotenv.config();
 
@@ -20,7 +20,7 @@ app.use("/admin", adminRouter);
 app.use("/customer", customerRouter);
 app.use("/transport", transportRouter);
 app.use("/ticket", ticketRouter);
-app.use("/passport", passportRoutes);
+app.use("/passport", passportRoutes); 
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
