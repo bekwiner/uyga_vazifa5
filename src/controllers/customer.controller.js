@@ -4,7 +4,8 @@ import {
   loginValidator,
   updateValidator,
 } from "../validation/customer.validation.js";
-import { handleError, successRes } from "../helpers/error-response.js";
+import { handleError } from "../helpers/error-response.js";
+import { successRes } from "../helpers/success-response.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
@@ -43,11 +44,20 @@ export class CustomerController {
   }
 
   static async me(req, res) {
-    const customer = await Customer.findById(req.user.id).select("-password");
-    return successRes(res, customer);
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return handleError(res, "Token yo‘q", 401);
+
+    const token = authHeader.split(" ")[1];
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET);
+      const customer = await Customer.findById(decoded.id).select("-password");
+      return successRes(res, customer);
+    } catch (err) {
+      return handleError(res, "Token yaroqsiz", 403);
+    }
   }
 
-  static async update(req, res) {
+  static async updateCustomer(req, res) {
     const { value, error } = updateValidator.validate(req.body);
     if (error) return handleError(res, error, 422);
 
@@ -58,11 +68,23 @@ export class CustomerController {
     const updated = await Customer.findByIdAndUpdate(req.params.id, value, {
       new: true,
     }).select("-password");
+
     return successRes(res, updated);
   }
 
-  static async delete(req, res) {
+  static async deleteCustomer(req, res) {
     await Customer.findByIdAndDelete(req.params.id);
     return successRes(res, { message: "Deleted" });
+  }
+
+  static async getAllCustomers(req, res) {
+    const customers = await Customer.find().select("-password");
+    return successRes(res, customers);
+  }
+
+  static async getCustomerById(req, res) {
+    const customer = await Customer.findById(req.params.id).select("-password");
+    if (!customer) return handleError(res, "Customer not found", 404);
+    return successRes(res, customer);
   }
 }

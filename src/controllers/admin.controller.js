@@ -4,7 +4,9 @@ import {
   loginValidator,
   updateValidator,
 } from "../validation/admin.validation.js";
-import { handleError, successRes } from "../helpers/error-response.js";
+
+import { handleError } from "../helpers/error-response.js";
+import { successRes } from "../helpers/success-response.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 

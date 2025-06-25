@@ -1,6 +1,7 @@
 import Ticket from '../models/ticket.model.js';
 import { ticketValidator } from '../validation/ticket.validation.js';
-import { handleError, successRes } from '../helpers/error-response.js';
+import { handleError } from "../helpers/error-response.js";
+import { successRes } from "../helpers/success-response.js";
 
 export class TicketController {
   static async create(req, res) {
